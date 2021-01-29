@@ -60,4 +60,27 @@ var plus = function() {
   }
   return a;
 }
+// 创建缓存代理的工厂
+var createProxyFactory = function( fn ) {
+  var cache = {};
+  return function() {
+    var args = Array.prototype.join.call(arguments, ',');
+    if (args in cache) {
+      return cache[args];
+    }
+    return cache[args] = fn.apply(this, arguments);
+  }
+}
+var proxyMult = createProxyFactory(mult);
+proxyPlus = createProxyFactory(plus);
+
+proxyMult(1, 2, 3, 4);
+proxyPlus(1, 2, 3, 4);
 ```
+
+## 其他代理模式
+- 防火墙代理： 控制网络资源的访问，保护主机不让坏人接近
+- 远程代理：为一个对象在不同的地址空间提供局部代表
+- 保护代理：用于对象应该有不同访问权限的情况
+- 智能引用代理：取代了简单的指针，它在访问对象时执行一些附加操作，比如计算一个对象被引用的次数
+- 写时复制代理：通常用于复制一个庞大对象的情况。写时复制代理延迟了复制的过程，当对象被真正修改时，才对它进行复制操作。写时复制代理是虚拟代理的一种变体，dll（操作系统中的动态链接库）是其典型运用场景
